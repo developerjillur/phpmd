@@ -204,6 +204,37 @@ class UnusedPrivateFieldTest extends AbstractTestCase
         $rule->apply($this->getClass());
     }
 
+    /**
+     * @link https://github.com/phpmd/phpmd/issues/887
+     */
+    public function testRuleDoesNotApplyToPrivateFieldInterpolatedInString(): void
+    {
+        $rule = new UnusedPrivateField();
+        $rule->setReport($this->getReportWithNoViolation());
+        $rule->apply($this->getClass());
+    }
+
+    public function testRuleAppliesWhenFieldWithSameNameIsInterpolatedOnDifferentObject(): void
+    {
+        $rule = new UnusedPrivateField();
+        $rule->setReport($this->getReportWithOneViolation());
+        $rule->apply($this->getClass());
+    }
+
+    public function testRuleAppliesToPrivateFieldNamedAsArrayKeyOfThisInString(): void
+    {
+        $rule = new UnusedPrivateField();
+        $rule->setReport($this->getReportWithOneViolation());
+        $rule->apply($this->getClass());
+    }
+
+    public function testRuleAppliesToPrivateFieldNamedInNowdoc(): void
+    {
+        $rule = new UnusedPrivateField();
+        $rule->setReport($this->getReportWithOneViolation());
+        $rule->apply($this->getClass());
+    }
+
     public function testRuleDoesNotApplyToFieldWithMethodsThatReturnArray(): void
     {
         $rule = new UnusedPrivateField();

@@ -32,13 +32,17 @@ use PDepend\Source\AST\ASTVariable;
 use PDepend\Source\AST\ASTVariableDeclarator;
 use PHPMD\AbstractNode;
 use PHPMD\AbstractRule;
+use PHPMD\Attribute\SuppressWarnings;
 use PHPMD\Node\ClassNode;
+use PHPMD\Rule\Design\CouplingBetweenObjects;
 use PHPMD\Utility\ExceptionsList;
+use PHPMD\Utility\InterpolatedProperties;
 
 /**
  * This rule collects all private fields in a class that aren't used in any
  * method of the analyzed class.
  */
+#[SuppressWarnings(CouplingBetweenObjects::class)]
 final class UnusedPrivateField extends AbstractRule implements ClassAware
 {
     /**
@@ -131,6 +135,10 @@ final class UnusedPrivateField extends AbstractRule implements ClassAware
             if ($this->isInScopeOfClass($class, $postfix)) {
                 $this->removeUsedField($postfix);
             }
+        }
+
+        foreach (InterpolatedProperties::readOnThis($class->getNode()) as $name) {
+            unset($this->fields[$name]);
         }
     }
 
