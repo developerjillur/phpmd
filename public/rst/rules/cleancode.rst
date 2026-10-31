@@ -136,7 +136,11 @@ Since: PHPMD 2.7.0
 
 Importing all external classes in a file through use statements makes them clearly visible.
 
+Classes in the global namespace do not need to be imported when used from the global namespace.
+
 Example: ::
+
+  namespace PHPMDExample;
 
   function make() {
       return new \stdClass();
